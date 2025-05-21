@@ -1,0 +1,33 @@
+<RequireAny>
+    Require ip 192.168.3.18
+    Require ip 192.168.1.2
+    Require ip 192.168.0.104
+    Require ip 192.168.88.200
+    Require ip 192.168.3.200
+    Require ip 192.168.3.19
+    Require ip 192.168.88.250
+    Require ip 192.168.88.251
+    Require ip 192.168.88.252
+    Require ip 192.168.88.253
+    Require ip 192.168.88.254
+    Require ip 192.168.88.30
+    Require ip 192.168.88.31
+    Require ip 192.168.88.32
+    Require ip 192.168.88.33
+    Require ip 192.168.88.34
+    Require ip 192.168.88.29  
+    Require ip 127.0.0.1
+</RequireAny>
+#Header set Access-Control-Allow-Origin "http://192.168.1.15"
+#Header set Access-Control-Allow-Origin "http://192.168.3.200"
+#Header set Access-Control-Allow-Origin "http://192.168.3.18"
+#Header set Access-Control-Allow-Origin "http://192.168.1.2"
+Header set Access-Control-Allow-Origin "http://192.168.88.250"
+Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type"
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+RewriteRule ^(.*)\.css$ $1.css [L]
+RewriteRule ^(.*)\.js$ $1.js [L]
