@@ -1,0 +1,5 @@
+'hostname' => 'db',
+'username' => 'usuario',
+'password' => 'userpw',
+'database' => 'inventarios',
+'dbdriver' => 'mysqli',
