@@ -1,28 +1,24 @@
-# ----------------------------------------------------------------------
-# Reglas generales para CodeIgniter
-# ----------------------------------------------------------------------
-<IfModule mod_rewrite.c>
-  Options -Indexes
-  RewriteEngine On
+# Desactiva el listado de directorios
+Options -Indexes
 
-  # Asegura que el RewriteBase apunte a la raíz del contenedor
-  RewriteBase /
+# Protege archivos ocultos (como .git, .env, etc.)
+<FilesMatch "^\.">
+  Require all denied
+</FilesMatch>
 
-  # Si el recurso existe como archivo o directorio, lo sirve Apache tal cual
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-
-  # Si no existe, se redirige a index.php (CI)
-  RewriteRule ^(.*)$ index.php/$1 [L]
+# Habilita CORS para cualquier origen
+<IfModule mod_headers.c>
+  Header always set Access-Control-Allow-Origin "*"
+  Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+  Header always set Access-Control-Allow-Headers "Content-Type"
 </IfModule>
 
-# ----------------------------------------------------------------------
-# Seguridad básica
-# ----------------------------------------------------------------------
-<Files .*>
-  Order Deny,Allow
-  Deny from all
-</Files>
+# Reescribe URLs para que todas pasen por index.php
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
 
-# Evita listar directorios
-Options -Indexes
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+</IfModule>

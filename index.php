@@ -1,41 +1,24 @@
 <?php
-/*******************************
- *  FRONT-CONTROLLER PERSONAL  *
- *******************************/
+define('BASEPATH', true);
+require_once __DIR__.'/Config/Config.php';
+require_once __DIR__.'/Config/App/autoload.php';
 
-define('BASEPATH', true);               // para que otros archivos lo detecten
-require_once __DIR__ . '/Config/Config.php';
-require_once __DIR__ . '/Config/App/autoload.php';
+/* ---- Router muy simple ---- */
+$ruta   = $_GET['url'] ?? 'Home/index';
+$parts  = explode('/', trim($ruta, '/'));
 
-/*-------------------------------
-| 1) Resolver URL → C/M/Params |
---------------------------------*/
-$ruta       = !empty($_GET['url']) ? $_GET['url'] : 'Home/index';
-$segmentos  = explode('/', trim($ruta, '/'));
+$ctrl   = ucfirst($parts[0] ?: 'Home');
+$method = $parts[1]     ?? 'index';
+$params = implode(',', array_slice($parts, 2)); // compat. con tu código viejo
 
-$controller = ucfirst($segmentos[0]);   // «Home»
-$metodo     = $segmentos[1] ?? 'index'; // «index»
-$parametros = array_slice($segmentos, 2);
-
-/*-------------------------------
-| 2) Cargar controlador        |
---------------------------------*/
-$archivo = __DIR__ . "/Controllers/{$controller}.php";
-
-if (!file_exists($archivo)) {
-    http_response_code(404);
-    exit("Controlador <strong>{$controller}</strong> no encontrado");
+$file = __DIR__."/Controllers/{$ctrl}.php";
+if (!is_file($file)) {
+    http_response_code(404); exit("Controlador $ctrl no existe");
 }
+require_once $file;
 
-require_once $archivo;
-$instance = new $controller();
-
-/*-------------------------------
-| 3) Invocar método            |
---------------------------------*/
-if (!method_exists($instance, $metodo)) {
-    http_response_code(404);
-    exit("Método <strong>{$metodo}</strong> no encontrado en {$controller}");
+$obj = new $ctrl();
+if (!method_exists($obj, $method)) {
+    http_response_code(404); exit("Método $method no existe");
 }
-
-call_user_func_array([$instance, $metodo], $parametros);
+call_user_func([$obj, $method], $params);

@@ -55,7 +55,7 @@
     </div>
     <script src="<?php echo base_url; ?>/Assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
     <script src="<?php echo base_url; ?>/Assets/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    <script src="<?php echo base_url; ?>/Assets/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo base_url; ?>Assets/js/jquery.dataTables.min.js"></script>
     <script src="<?php echo base_url; ?>/Assets/js/scripts.js"></script>
     <script>
         const base_url = "<?php echo base_url; ?>";

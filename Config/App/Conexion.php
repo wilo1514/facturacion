@@ -1,20 +1,49 @@
 <?php
+/**
+ * Clase de conexión PDO única para toda la aplicación.
+ * Requiere que en Config/Config.php existan:
+ *   DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_CHARSET
+ */
 class Conexion
 {
-  private $conect;
-  public function __construct()
-  {
-    $pdo = "mysql:host=" . host . ";dbname=" . db . ";charset=utf8";
-    try {
-      $this->conect = new PDO($pdo, user, pass);
-      $this->conect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    } catch (PDOException $e) {
-      echo "Error en la conexion" . $e->getMessage();
+    /** @var PDO */
+    private $conect;
+
+    public function __construct()
+    {
+        /* DSN con host del contenedor ('db') y utf8mb4 */
+        $dsn = sprintf(
+            'mysql:host=%s;dbname=%s;charset=%s',
+            DB_HOST,
+            DB_NAME,
+            DB_CHARSET
+        );
+
+        try {
+            $this->conect = new PDO($dsn, DB_USER, DB_PASS, [
+                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]);
+        } catch (PDOException $e) {
+            /* Lanza la excepción para que el caller la maneje o se loguee */
+            throw new RuntimeException('Error de conexión: ' . $e->getMessage(), 0, $e);
+        }
     }
-  }
-  public function conect()
-  {
-    return $this->conect;
-  }
+
+    /** Devuelve la instancia PDO */
+    public function conect()
+    {
+        return $this->conect;
+    }
+
+    /* ---------- Singleton opcional ---------- */
+    private static $instancia = null;
+
+    public static function getInstance(): PDO
+    {
+        if (self::$instancia === null) {
+            self::$instancia = (new self())->conect();
+        }
+        return self::$instancia;
+    }
 }
-?>

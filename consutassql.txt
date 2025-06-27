@@ -1,0 +1,55 @@
+INSERT INTO inventarios.usuarios (nombre, usuario, clave, id_caja)
+VALUES ('Administrador', 'admin', SHA2('admin', 256),1);
+
+INSERT INTO inventarios.permisos (id, permiso) VALUES
+  (1 , 'usuarios'),
+  (2 , 'cajas_farmacia'),
+  (3 , 'clientes'),
+  (4 , 'presentaciones'),
+  (5 , 'categorias'),
+  (6 , 'productos'),
+  (7 , 'productos_farmacia'),
+  (8 , 'compras'),
+  (9 , 'ingresar_compra'),
+  (10, 'lista_compras'),
+  (11, 'lista_compras_admin'),
+  (12, 'ventas'),
+  (13, 'ingresar_venta'),
+  (14, 'lista_ventas'),
+  (15, 'lista_ventas_admin'),
+  (16, 'caducados')
+ON DUPLICATE KEY UPDATE
+  permiso = VALUES(permiso);
+
+INSERT INTO inventarios.configuracion (id, ruc, nombre, telefono, direccion, mensaje) VALUES
+  (1,
+   '0190317609001',
+   'Clínica y Maternidad Albán',
+   '0963642366',
+   'Sector Control Sur, Carretera Panamericana y J ...',  -- pon aquí la dirección completa
+   'grax')
+ON DUPLICATE KEY UPDATE
+   ruc       = VALUES(ruc),
+   nombre    = VALUES(nombre),
+   telefono  = VALUES(telefono),
+   direccion = VALUES(direccion),
+   mensaje   = VALUES(mensaje);
+
+INSERT INTO inventarios.detalle_permisos (id_usuario, id_permiso) VALUES
+  (1,  1),
+  (1,  2),
+  (1,  3),
+  (1,  4),
+  (1,  5),
+  (1,  6),
+  (1,  7),
+  (1,  8),
+  (1,  9),
+  (1, 10),
+  (1, 11),
+  (1, 12),
+  (1, 13),
+  (1, 14),
+  (1, 15)
+ON DUPLICATE KEY UPDATE
+  id_permiso = VALUES(id_permiso);
